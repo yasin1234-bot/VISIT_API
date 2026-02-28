@@ -1,3 +1,8 @@
+
+#This was made by AGAJAYOFFICIAL 
+#This was made by AGAJAYOFFICIAL 
+#This was made by AGAJAYOFFICIAL 
+#This was made by AGAJAYOFFICIAL 
 from flask import Flask, jsonify
 import aiohttp
 import asyncio
@@ -68,7 +73,7 @@ async def visit(session, url, token, uid, data):
         app.logger.error(f"❌ Visit error: {e}")
         return False, None
 
-async def send_until_10000_success(tokens, uid, server_name, target_success=10000):
+async def send_until_2000_success(tokens, uid, server_name, target_success=2000):
     url = get_url(server_name)
     connector = aiohttp.TCPConnector(limit=0)
     total_success = 0
@@ -81,7 +86,7 @@ async def send_until_10000_success(tokens, uid, server_name, target_success=1000
         data = bytes.fromhex(encrypted)
 
         while total_success < target_success:
-            batch_size = min(target_success - total_success, 10000)
+            batch_size = min(target_success - total_success, 300)
             tasks = [
                 asyncio.create_task(visit(session, url, tokens[(total_sent + i) % len(tokens)], uid, data))
                 for i in range(batch_size)
@@ -107,7 +112,7 @@ async def send_until_10000_success(tokens, uid, server_name, target_success=1000
 def send_visits(server, uid):
     server = server.upper()
     tokens = load_tokens(server)
-    target_success = 10000
+    target_success = 2000
 
     if not tokens:
         return jsonify({"error": "❌ No valid tokens found"}), 500
@@ -115,7 +120,7 @@ def send_visits(server, uid):
     print(f"🚀 Sending visits to UID: {uid} using {len(tokens)} tokens")
     print(f"Waiting for total {target_success} successful visits...")
 
-    total_success, total_sent, player_info = asyncio.run(send_until_10000_success(
+    total_success, total_sent, player_info = asyncio.run(send_until_2000_success(
         tokens, uid, server,
         target_success=target_success
     ))
@@ -135,4 +140,4 @@ def send_visits(server, uid):
         return jsonify({"error": "Could not decode player information"}), 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5090)
